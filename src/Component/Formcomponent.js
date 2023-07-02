@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik';
-import { TextField, Select, MenuItem, RadioGroup, FormControlLabel, Radio, Checkbox, FormControl, InputLabel, ListItemText, Autocomplete } from '@mui/material';
+import { TextField, Select, MenuItem, RadioGroup,  FormControlLabel, Radio, FormControl, InputLabel, Autocomplete } from '@mui/material';
+
 import { formSchema } from '../Schemas';
 import './Formcomponent.css'
 function Formcomponent() {
@@ -253,12 +254,16 @@ function Formcomponent() {
                 {label:"Zimbabwe", value: "Zimbabwe" },,
                     // Add more countries as needed
           ];
+          const [selectedNames, setSelectedNames] = useState([]);
 
           const hobbies = [
-                    { label: 'Reading', value: 'reading' },
-                    { label: 'Sports', value: 'sports' },
-                    { label: 'Cooking', value: 'cooking' },
-                    // Add more hobbies as needed
+            "Gaming",
+            "Sports",
+            "Singing",
+            "Dancing",
+            "Programming",
+            "Art",
+           
           ];
 
           const initialValues = {
@@ -269,8 +274,9 @@ function Formcomponent() {
                     hobbies: [],
           };
 
-          const handleSubmit = (values) => {
-                    console.log(values);
+          const handleSubmit = async(values) => {
+                    values.hobbies=await selectedNames;
+                    console.log(values)
           };
           return (
 
@@ -303,24 +309,24 @@ function Formcomponent() {
                                                             </FormControl>
                                                             {errors.gender && touched.gender ? <span className="error">{errors.gender}</span> : <></>}
                                                             <FormControl className='span'>
-                                                                      <InputLabel htmlFor="hobbies">Hobbies/Interests</InputLabel>
-                                                                      <Field
-                                                                                name="hobbies"
-                                                                                as={Autocomplete}
-                                                                               
-                                                                                multiple
-
-                                                                                renderInput={(props) => <TextField {...props} />}
-                                                                                renderOption={(option, { selected }) => (
-                                                                                          <React.Fragment>
-                                                                                                    <Checkbox color="primary" checked={selected} />
-                                                                                                    <ListItemText primary={option.label} />
-                                                                                          </React.Fragment>
-                                                                                )}
-                                                                                options={hobbies}
-                                                                                getOptionLabel={(option) => option.label}
-                                                                                getOptionSelected={(option, value) => option.value === value.value}
-                                                                      />
+                                                            <InputLabel>hobbies/interests</InputLabel>
+                                                            <Autocomplete
+                                                            onChange={(e)=>{setSelectedNames(e)}}
+      
+      multiple
+      
+      options={hobbies}
+      getOptionLabel={(option) => option}
+      disableCloseOnSelect
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="outlined"
+          label="hobbies/interests"
+          placeholder="Multiple Autocomplete"
+        />
+      )}
+    />
                                                             </FormControl>
                                                             {errors.hobbies && touched.hobbies ? <span className="error">{errors.hobbies}</span> : <></>}
                                                             <span className="span btn"><button type="submit" className='button'>Submit</button></span>
